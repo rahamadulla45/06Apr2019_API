@@ -25,6 +25,12 @@ class UserUpdateView(RetrieveUpdateAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'user_id'
 
+class UserDetailView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'user_id'
+
 class ItemListView(ListAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemListSerializer
@@ -37,6 +43,13 @@ class ItemDetailView(RetrieveAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'item_id'
 
+class OrderDetailView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
+
+
 
 class CheckOutView(RetrieveUpdateAPIView):
     queryset = Order.objects.all()
@@ -46,10 +59,27 @@ class CheckOutView(RetrieveUpdateAPIView):
 
 
 class CartListView(ListAPIView):
-    queryset = Cart.objects.all()
+    # queryset = Cart.objects.all()
+    # serializer_class = CartListSerializer
+    # filter_backends = [SearchFilter]
+    # search_fields = ['order',]
+    serializer_class = CartSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'user_id'
+
+    def get_queryset(self):
+        return Order.objects.filter(status=0)
+
+class CartDetailView(ListAPIView):
+    #queryset = CartItem.objects.all()
     serializer_class = CartListSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['order',]
+    
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
+
+    def get_queryset(self):
+        order = self.kwargs['order_id']
+        return Cart.objects.filter(order=order)
 
 class CartDeleteView(DestroyAPIView):
     queryset = Cart.objects.all()

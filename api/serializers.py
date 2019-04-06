@@ -38,7 +38,7 @@ class ItemDetailSerializer(serializers.ModelSerializer):
 class ItemNameSerializer(serializers.ModelSerializer):
    class Meta:
         model = Item
-        fields = ['name','image']
+        fields = ['name']
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -68,7 +68,7 @@ class CheckOutSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart
+        model = Order
         fields = '__all__'
 
 class CartListSerializer(serializers.ModelSerializer):
